@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo3</title>
+    <style>
+
+#drag-element {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: move;
+}
+    </style>
+</head>
+<body>
+<div id="drag-element"  style="user-select: none;" >
+  <img src="../static/img/03.gif" style="width: 120px;height: 80px;border-radius: 50px;">
+</div>
+<script>
+   // 获取元素
+   const dragElement = document.getElementById("drag-element");
+
+   // 禁止图片预览拖动
+dragElement.addEventListener("dragstart", function(e) {
+  e.preventDefault();
+});
+
+// 鼠标按下事件
+dragElement.addEventListener("mousedown", function(e) {
+  var offsetX = e.clientX - dragElement.offsetLeft;
+  var offsetY = e.clientY - dragElement.offsetTop;
+
+  // 鼠标移动事件
+  document.addEventListener("mousemove", moveElement);
+
+  // 鼠标松开事件
+  document.addEventListener("mouseup", function() {
+    document.removeEventListener("mousemove", moveElement);
+  });
+
+  // 移动元素函数
+  function moveElement(e) {
+    dragElement.style.left = (e.clientX - offsetX) + "px";
+    dragElement.style.top = (e.clientY - offsetY) + "px";
+  }
+});
+</script>
+
+</body>
+</html>

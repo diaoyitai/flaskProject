@@ -1,0 +1,54 @@
+{% extends 'index.html'%}
+{% block title %}
+    查询端口
+{% endblock %}
+{% block body %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='longing.css') }}">
+    <body>
+
+<div class="big_box">
+
+        <div class="input_box">
+            <input type="text" placeholder="输入ip地址" name="ip">
+        </div>
+        <div class="input_box">
+            <input type="text" placeholder="输入端口号" name="port">
+        </div>
+
+        <div class="input_box">
+          <button class="btn btn-outline-success" style="cursor: pointer;" onclick="ajax()">查询</button>
+        </div>
+
+        <div class="input_box">
+            <input type="text" placeholder="端口状态" id="result">
+        </div>
+    </div>
+<script>
+    const arr = document.querySelectorAll(".input_box");
+    setTimeout(() => {
+        arr.forEach(item => {
+            item.style.opacity = 1
+        })
+    }, 2000)
+</script>
+
+<script>
+    function ajax() {
+        a=document.getElementById('result')
+         //判断输入是否完整
+        if (document.getElementsByName('ip')[0].value === '' || document.getElementsByName('port')[0].value === '') {
+            a.value='请输入完整！'
+            return
+        }
+        a.value='端口扫描中...'
+        $.post('/port/', {
+            'ip': document.getElementsByName('ip')[0].value,
+            'port': document.getElementsByName('port')[0].value,
+        }, function (data) {
+            console.log(data)
+            a.value = data
+        })
+    }
+</script>
+    </body>
+{% endblock %}

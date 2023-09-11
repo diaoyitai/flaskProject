@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: transparent">
+<head>
+    <meta charset="UTF-8">
+    <title>demo2</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='longing.css') }}">
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body,
+        html {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+        .big_box {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            margin: 100px auto;
+            width: 500px;
+            height: 400px;
+            background-color: #000000;
+            border: 5px solid rgba(0, 246, 246, 0.93);
+            box-shadow: 0px 2px 80px rgba(112, 232, 250, 0.93);
+            border-radius: 3px;
+            animation: move 3s ease;
+        }
+
+
+        @keyframes move {
+            0% {
+                width: 0px;
+                height: 0px;
+                padding: 0;
+            }
+
+            50% {
+                width: 2px;
+                height: 400px;
+                padding: 0;
+            }
+
+            100% {
+                width: 500px;
+                height: 400px;
+                padding: 15px;
+            }
+
+        }
+
+        .input_box {
+            flex: 1;
+            display: flex;
+            padding: 10px;
+            opacity: 0;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.5s;
+        }
+
+        .input_box input,
+        .input_box .other_box {
+            outline: 0;
+            border: 3px solid rgba(0, 0, 0, 0.87);
+            background-color: #474947ee;
+            border-radius: 3px;
+            width: 80%;
+            height: 80%;
+            color: #fff;
+            padding-left: 8px;
+        }
+
+        .big_box .other_box {
+            border: 0;
+            box-shadow: 0px 1px 8px #7c7b7b;
+            text-align: center;
+            line-height: 1.8em;
+            color: #fff;
+            font-weight: 600;
+            font-size: 18px;
+            padding: 0;
+        }
+
+        .other_box span,.other_box a{
+            font-size: 12px;
+            margin-left: 5px;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body style="background-color: transparent">
+    <div class="big_box" style="background-color: transparent; " >
+        <div class="input_box">
+            <div class="other_box" style="background-color: white;box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.5);">
+            <span style="float: left" >
+                <img src="{{ url_for('static',filename='img/dr.png') }}" height="30px" style="float: right">
+            </span>
+            <span style="float: right;" onclick="close_login()" ><img width="30px" height="30px" src="data:image/jpeg;base64,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"></span>
+            </div>
+        </div>
+            <div class="input_box">
+            <input type="text" name="account" placeholder="输入账号">
+            </div>
+            <br><br>
+            <div class="input_box">
+            <input type="password" name="password" placeholder="输入密码">
+            </div>
+            <br><br>
+             <div class="input_box">
+            <button type="button" onclick="login()">登录</button>
+                 <a href=" {{ url_for('user.register') }}" target="_blank"><button type="button">注册</button></a>
+             </div>
+         <div class="input_box">
+
+         </div>
+        </div>
+</body>
+
+
+<script>
+    const arr = document.querySelectorAll(".input_box");
+    setTimeout(() => {
+        arr.forEach(item => {
+            item.style.opacity = 1
+        })
+    }, 2000)
+</script>
+
+</html>
+</body>
+</html>

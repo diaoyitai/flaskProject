@@ -1,0 +1,61 @@
+{% extends 'index.html'%}
+{% block title %}
+查询ip
+{% endblock %}
+{% block daobao %}
+{{ super() }}
+{% endblock %}
+{% block body %}
+<body>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='longing.css') }}">
+<div class="big_box">
+
+        <div class="input_box">
+            <input type="text" placeholder="输入域名" name="domain" >
+        </div>
+
+      <div class="input_box">
+          <button class="btn btn-outline-success" style="cursor: pointer;" onclick="ajax()">查询</button>
+        </div>
+
+        <div class="input_box">
+            <input type="text" placeholder="IP" id="结果">
+        </div>
+    </div>
+<script>
+    const arr = document.querySelectorAll(".input_box");
+    setTimeout(() => {
+        arr.forEach(item => {
+            item.style.opacity = 1
+        })
+    }, 2000)
+</script>
+{##}
+
+<script>
+    function ajax(){
+        a=document.getElementById('结果')
+        a.value='查询中'
+        $.ajax({
+        url: '/ip/',
+        type: 'post',
+        async: true,   //异步请求
+        data: {
+            'domain': document.getElementsByName('domain')[0].value,
+        },
+        success: function(data) {
+            console.log(data)
+            a.value=data
+       },
+       error: function(jqXHR, textStatus, errorThrown) {
+           a.value='连接出错了...请稍后重试'
+
+       }
+     });
+    }
+
+
+</script>
+
+</body>
+{% endblock %}

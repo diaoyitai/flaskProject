@@ -1,0 +1,163 @@
+{% extends 'index.html'%}
+{% block title %}
+主机监控
+{% endblock %}
+{% block daobao %}
+{{ super() }}
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js" ></script>
+{% endblock %}
+{% block body %}
+<style>
+#drag-element {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: move;
+}
+</style>
+<body style="user-select: none;">
+
+<div id="drag-element"  style="user-select: none;position:fixed;top: 90%;left: 70%;z-index:999" >
+  <img id="zc" src="../static/img/03.gif" style="width: 110px;height: 80px;border-radius: 50px;">
+</div>
+
+<script src="{{ url_for('static',filename='host_status.js') }}"></script>
+<div class="container-fluid">
+    <div class="row col-1">
+        <img src="{{ url_for('static',filename='img/dr.png') }}" title="东软徽图">
+    </div>
+  <div class="row">
+    <div class="col-2 " style="border-color: #1d2124">
+      <ul class="nav flex-column nav-pills">
+        <li class="nav-item">
+            <div class="nav-link" data-target="系统" onclick="sys_info()">系统&nbsp;<span style="font-weight: 100;font-size: 5px">(点击刷新)</span></div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link" data-target="CPU" >CPU</div>
+        </li>
+        <li class="nav-item">
+          <div class="nav-link" data-target="网络">网络</div>
+        </li>
+          <li class="nav-item">
+          <div class="nav-link" data-target="内存">内存</div>
+        </li>
+          <li class="nav-item">
+          <div class="nav-link" data-target="磁盘" onclick="disk_info()" >磁盘&nbsp;<span style="font-weight: 100;font-size: 5px">(点击刷新)</span></div>
+        </li>
+          <li class="nav-item">
+          <div class="nav-link" data-target="进程" >进程</div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-10" style="margin-top: 15px;">
+
+      <div id="系统" class="section" style="display: none;">
+        <p style="font-weight: 100;font-size: 15px">上次更新时间:&nbsp;<span id="sud">null</span></p>
+        <p style="font-weight: normal">主机名:&nbsp;<span id="sn" style="font-weight: bold">null</span></p>
+        <p style="font-weight: normal">操作系统:&nbsp;<span id="st" style="font-weight: bold">null</span></p>
+        <p style="font-weight: normal">用户:&nbsp;<span id="su" style="font-weight: bold">null</span></p>
+        <p style="font-weight: normal">系统启动时间:&nbsp;<span id="ss" style="font-weight: bold">null</span></p>
+        <p style="font-weight: normal">是否连接电源适配器:&nbsp;<span id="sp" style="font-weight: bold">null</span></p>
+        <p style="font-weight: normal">电池电量:&nbsp;<span id="se" style="font-weight: bold">null</span>%</p>
+        <p style="font-weight: normal">预计可用时间:&nbsp;<span id="sr" style="font-weight: bold">null</span>小时</p>
+      </div>
+
+      <div id="CPU" class="section" style="display: none;">
+        <p style="font-weight: 100;font-size: 15px">数据实时更新中...</p>
+        <p>逻辑处理器：<span style="font-weight: bold" id="cmore"></span></p>
+        <p>内核：<span style="font-weight: bold" id="cless"></span></p>
+         <div id="cpu_used" style="width: 500px;height: 300px;">
+
+         </div>
+      </div>
+
+      <div id="网络" class="section" style="display: none; ">
+          <div style="position: absolute;left:0;width:300px;">
+            <p style="font-weight: 100;font-size: 15px">数据实时更新中...</p>
+            <p>IPv4地址:<br>&nbsp;<span style="font-weight: bold" id="ip"></span></p>
+            <p>接收:&nbsp;<span style="font-weight: bold" id="nr">null</span>&nbsp;MB</p>
+            <p>发送:&nbsp;<span style="font-weight: bold" id="ns">null</span>&nbsp;MB</p>
+          </div>
+          <div style="position: absolute;left: 40%;width: 600px;">
+              主机TCP协议网络连接情况(已过滤0.0.0.0/127.0.0.1)：
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                    <th>protocol</th>
+                    <th>local_address</th>
+                    <th>foreign_address</th>
+                    <th>state</th>
+                    <th>pid</th>
+                  </tr>
+                </thead>
+                <tbody id="tcp">
+                </tbody>
+            </table>
+
+          </div>
+
+      </div>
+
+      <div id="内存" class="section" style="display: none;">
+        <p style="font-weight: 100;font-size: 15px">数据实时更新中...</p>
+          <div id="m1" style="position: absolute;width: 500px;height: 300px;">
+          </div>
+          <div id="m2" style="position: absolute;left: 60%;width: 500px;height:300px;">
+          </div>
+          <div id='m1r' style="position: absolute;top:320px;width: 500px;height: 400px;">
+            1231231
+          </div>
+          <div id="m2r" style="position: absolute;top:320px;width: 500px;height: 400px;left: 60%;">
+            1231231
+          </div>
+      </div>
+
+      <div id="磁盘" class="section" style="display: none;">
+        <p style="font-weight: 100;font-size: 15px">上次更新时间<span id="dud">null</span></p>
+        <p>磁盘使用情况(GB):</p>
+            <div style="font-weight: bold">
+          <div>
+          C: <br>free:&nbsp;<span class="dC">null</span>&nbsp;&nbsp;used:&nbsp;<span class="dC">null</span>&nbsp;&nbsp;total:&nbsp;<span class="dC">null</span>
+          </div>
+          <div>
+          D: <br>free:&nbsp;<span class="dD">null</span>&nbsp;&nbsp;used:&nbsp;<span class="dD">null</span>&nbsp;&nbsp;total:&nbsp;<span class="dD">null</span>
+          </div>
+          <div>
+          E: <br>free:&nbsp;<span class="dE">null</span>&nbsp;&nbsp;used:&nbsp;<span class="dE">null</span>&nbsp;&nbsp;total:&nbsp;<span class="dE">null</span>
+          </div>
+            </div>
+          <div>
+              <br><br>
+              C、D、E磁盘百分比使用情况分别如下图所示：
+          </div>
+          <div >
+              <span id="C盘图" style="width: 400px;height:200px;position: fixed;left: 25%" >
+              </span>
+              <span id="D盘图" style="width: 400px;height:200px;position: fixed;left: 45%">
+              </span>
+              <span id="E盘图"style="width: 400px;height:200px;position: fixed;left:65%">
+              </span>
+          </div>
+      </div>
+
+      <div id="进程" class="section" style="display: none;">
+        <p style="font-weight: 100;font-size: 15px">实时刷新中</p>
+        <table class="table" >
+            <thead>
+                <tr>
+                <th>name</th>
+                <th>state</th>
+                <th>pid</th>
+                <th>memory_percent</th>
+                </tr>
+            </thead>
+            <tbody id="process">
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'index.html'%}
+{% block title %}
+    查询网段
+{% endblock %}
+{% block body %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='longing.css') }}">
+    <body>
+    <div class="big_box" style="user-select: none;">
+        <div class="input_box" >
+        <input type="text" placeholder="输入ip地址" name="ip" >
+        </div>
+        <div class="input_box" >
+        <input type="text" placeholder="输入子网掩码" name="mask">
+         </div>
+        <div class="input_box" >
+            <button type="button" class="btn-outline-success btn" onclick="ajax()">提交</button>
+        </div>
+
+
+        <div class="input_box" >
+            <table border="1" style="background-color:wheat">
+                <tr>
+                    <td width="100px">IP地址类型</td>
+                    <td width="120px" id="type">null</td>
+                </tr>
+                 <tr>
+                    <td>IP地址网段</td>
+                    <td id="Network_segment">null</td>
+                </tr> <tr>
+                    <td>ip个数</td>
+                    <td id="num">null</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+<div  id="load" style="display: none ;position:absolute;top: 70%;left: 40%; color: red">
+请输入正确的ip地址或子网掩码！
+</div>
+<div  id="warn" style="display: none ;position:absolute;top: 70%;left: 40%; color: red">
+请输入完整！
+</div>
+<script>
+    const arr = document.querySelectorAll(".input_box");
+    setTimeout(() => {
+        arr.forEach(item => {
+            item.style.opacity = 1
+        })
+    }, 2000)
+</script>
+
+<script>
+    function ajax() {
+               {#判断输入是否完整#}
+        if (document.getElementsByName('ip')[0].value === '' || document.getElementsByName('mask')[0].value === '') {
+            //提示信息
+            document.getElementById('warn').style.display = 'block'
+            setTimeout(function () {
+                document.getElementById('warn').style.display = 'none'
+            }, 2000)
+            return
+        }
+        //向后台请求数据
+        $.post('/Network_segment/', {
+            'ip': document.getElementsByName('ip')[0].value,
+            'mask': document.getElementsByName('mask')[0].value
+        }, function (data) {
+            //后台报错，ip或子网掩码输入错误
+            if (data.ip_network === 'null') {
+                //提示错误信息
+                document.getElementById('load').style.display = 'block'
+                setTimeout(function () {
+                    document.getElementById('load').style.display = 'none'
+                }, 2000)
+                document.getElementById('type').innerText ='null'
+                document.getElementById('Network_segment').innerText = 'null'
+                document.getElementById('num').innerText = 'null'
+                return
+            }
+            //后台请求数据成功
+            if (data.is_private === true) {
+                document.getElementById('type').innerText = '私有'
+            } else if (data.is_private === false) {
+                document.getElementById('type').innerText = '公共'
+            }
+            document.getElementById('Network_segment').innerText = data.ip_network
+            document.getElementById('num').innerText = data.num_hosts
+
+        })
+    }
+</script>
+
+
+    </body>
+{% endblock %}

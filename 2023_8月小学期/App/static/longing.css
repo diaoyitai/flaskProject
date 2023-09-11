@@ -1,0 +1,88 @@
+
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body,
+        html {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+        }
+
+        .big_box {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            margin: 100px auto;
+            width: 500px;
+            height: 400px;
+            background-color: transparent;
+            border: 5px solid rgba(0, 246, 246, 0.93);
+            box-shadow: 0px 2px 80px rgba(112, 232, 250, 0.93);
+            border-radius: 3px;
+            animation: move 3s ease;
+        }
+
+
+        @keyframes move {
+            0% {
+                width: 0px;
+                height: 0px;
+                padding: 0;
+            }
+
+            50% {
+                width: 2px;
+                height: 400px;
+                padding: 0;
+            }
+
+            100% {
+                width: 500px;
+                height: 400px;
+                padding: 15px;
+            }
+
+        }
+
+        .input_box {
+            flex: 1;
+            display: flex;
+            padding: 10px;
+            opacity: 0;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.5s;
+        }
+
+        .input_box input,
+        .input_box .other_box {
+            outline: 0;
+            border: 3px solid rgba(0, 0, 0, 0.87);
+            background-color: #474947ee;
+            border-radius: 3px;
+            width: 80%;
+            height: 80%;
+            color: #fff;
+            padding-left: 8px;
+        }
+
+        .big_box .other_box {
+            border: 0;
+            box-shadow: 0px 1px 8px #7c7b7b;
+            text-align: center;
+            line-height: 1.8em;
+            color: #fff;
+            font-weight: 600;
+            font-size: 18px;
+            padding: 0;
+        }
+
+        .other_box span,.other_box a{
+            font-size: 12px;
+            margin-left: 5px;
+            color: #fff;
+        }

@@ -1,0 +1,109 @@
+{% extends 'index.html'%}
+{% block title %}
+    查询域名/IP地址
+{% endblock %}
+{% block daobao %}
+{{ super() }}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='longing.css') }}">
+{% endblock %}
+{% block  body%}
+    <body style="user-select: none;">
+{#        中间查询#}
+        <div class="big_box" style="background: black;position: relative;">
+
+            <div class="input_box">
+                <input placeholder="IP/域名 无输入则查询自身ip"  id="ip" type="text">
+            </div>
+            <div class="input_box">
+              <button type="button" class="btn btn-outline-success" onclick="query()">查询</button>
+            </div>
+            <div class="input_box">
+                <input placeholder="状态" id="状态" type="text"  >
+            </div>
+        </div>
+{#          右边数据显示#}
+<div style="position: absolute;right:1%;top: 8%; width:500px;height: 600px;display: none;user-select: text" id="t" class="card">
+    <div >
+        <div class="card-body" style="position: relative">
+            <h1>Information</h1> <br>
+            <div style="font-weight: bold">
+                <div>城市：<span id="城市"></span></div><br>
+                <div>国家简称：<span id="国家简称"></span></div><br>
+                <div>国家：<span id="国家"></span></div><br>
+                <div>运营商：<span id="运营商"></span></div><br>
+                <div>IP：<span id="IP"></span></div><br>
+                <div>省份简称：<span id="省份简称"></span></div><br>
+                <div>省份：<span  id="省份"></span></div><br>
+                <div>时区：<span  id="时区"></span></div><br>
+                <div>经度：<span  id="经度"></span></div><br>
+                <div>纬度：<span  id="纬度"></span></div><br>
+            </div>
+        </div>
+    </div>
+</div>
+{#左边地图#}
+<div style="position: absolute;width:500px;height: 500px;left: 1%;top: 8%; display: none;" id="allmap">
+
+</div>
+
+<script>
+    const arr = document.querySelectorAll(".input_box");
+    setTimeout(() => {
+        arr.forEach(item => {
+            item.style.opacity = 1
+        })
+    }, 2000)
+</script>
+{#业务代码#}
+    {#百度地图api#}
+<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=AkPggR8FWfgwkvlB14FPoE3AONZksgZk"></script>
+    <script>
+        {#百度地图api调用#}
+        function baiduMap(lon,lat,city,num){
+            console.log(lon,lat,city,num)
+            var map = new BMap.Map("allmap"); // 百度地图API功能
+           // 创建Map实例
+            map.centerAndZoom(new BMap.Point(lon, lat), num);  // 初始化地图,设置中心点坐标和地图级别
+            //添加地图类型控件
+            map.addControl(new BMap.MapTypeControl({
+                mapTypes:[
+                    BMAP_NORMAL_MAP,
+                    BMAP_HYBRID_MAP
+                ]}));
+            map.setCurrentCity(city);          // 设置地图显示的城市 此项是必须设置的
+            map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+        }
+        {#发送查找请求#}
+function query(){
+    //查询中...
+    document.getElementById('状态').value='查询中...'
+    document.getElementById('t').style.display='none'
+    document.getElementById('allmap').style.display='none'
+    let ip=document.getElementById('ip').value
+    console.log('发送请求')
+    $.get('http://ip-api.com/json/'+ip,function (data){
+        console.log(data)
+        document.getElementById('状态').value=data.status
+        if (data.status==='success'){   //请求成功
+            document.getElementById('t').style.display='block'
+            document.getElementById('城市').innerText=data.city
+            document.getElementById('国家').innerText=data.country
+            document.getElementById('国家简称').innerText=data.countryCode
+            document.getElementById('运营商').innerText=data.isp
+            document.getElementById('IP').innerText=data.query
+            document.getElementById('省份').innerText=data.regionName
+            document.getElementById('省份简称').innerText=data.region
+            document.getElementById('时区').innerText=data.timezone
+            document.getElementById('经度').innerText=data.lon
+            document.getElementById('纬度').innerText=data.lat
+
+            baiduMap(data.lon,data.lat,data.city,20)
+        }
+        document.getElementById('allmap').style.display='block'
+
+    })
+}
+    </script>
+{#    内容结束#}
+    </body>
+{% endblock %}

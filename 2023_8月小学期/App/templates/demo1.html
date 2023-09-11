@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>demo1</title>
+ <link rel="icon" href="">
+
+<link rel="stylesheet" href="../static/bootstrap-4.3.1/css/bootstrap.min.css" >
+<script src="../static/jquery/3.4.1/jquery-3.4.1.min.js"></script>
+<script src="../static/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js" ></script>
+<script src="https://cdn.staticfile.org/axios/0.21.1/axios.min.js"></script>
+<script src="../static/demo1.js"></script>
+{#百度地图api#}
+<script type="text/javascript" src="//api.map.baidu.com/api?v=2.0&ak=AkPggR8FWfgwkvlB14FPoE3AONZksgZk"></script>
+<body style="user-select: none">
+<div style="position: absolute;left: 40%;top: 20%;">
+    <input id="ip" placeholder="IP/域名 无输入则查询当前ip" style="width: 500px;"><br>
+    <button type="button"onclick="query()">查询</button><br>
+         <div>查询状态：<span id="状态" ></span></div>
+    <div id="t" style="display: none">
+        <div>城市：<span id="城市"></span></div>
+        <div>国家简称：<span id="国家简称"></span></div>
+        <div>国家：<span id="国家"></span></div>
+        <div>运营商：<span id="运营商"></span></div>
+        <div>IP：<span id="IP"></span></div>
+        <div>省份简称：<span id="省份简称"></span></div>
+        <div>省份：<span  id="省份"></span></div>
+        <div>时区：<span  id="时区"></span></div>
+        <div>经度：<span  id="经度"></span></div>
+        <div>纬度：<span  id="纬度"></span></div>
+    </div>
+</div>
+<div style="position: absolute;width: 600px;height: 600px;left: 2%" id="allmap" >
+
+</div>
+
+<script>
+   {
+    baiduMap(116.514, 39.915,'北京',5)
+}
+</script>
+
+
+
+
+
+</body>
+</html>
